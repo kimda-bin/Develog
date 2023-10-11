@@ -21,10 +21,8 @@ const _Flex = styled.div`
 
 const _FlexInput = styled(_Flex)`
   width: 230px;
-  margin-top: 15px;
   height: 140px;
-  display: flex;
-  justify-content: space-evenly;
+  margin-top: 15px;
 `;
 
 const _Button = styled.button`
@@ -38,12 +36,13 @@ const _Button = styled.button`
   font-family: "HakgyoansimWoojuR";
 `;
 
-export default function Login() {
+export default function Signup() {
   return (
     <_FlexInput>
       <_Input type="text" placeholder="이메일" />
       <_Input type="password" placeholder="비밀번호" />
-      <_Button>로그인</_Button>
+      <_Input type="password" placeholder="비밀번호 확인" />
+      <_Button>회원가입</_Button>
     </_FlexInput>
   );
 }
