@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import "./fonts/Font.css";
+import { useForm } from "react-hook-form";
 
 const _Input = styled.input`
   width: 100%;
@@ -36,14 +37,66 @@ const _Button = styled.button`
   border-radius: 3px;
   margin-top: 10px;
   font-family: "HakgyoansimWoojuR";
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const _ErrorMsg = styled.div`
+  color: red;
+  font-size: 10px;
+  width: 230px;
+  margin-top: 2px;
 `;
 
 export default function Login() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  //계정(임시)
+  const id = "test@test.com";
+  const pw = "test1234";
+
+  const onSubmit = (data: any) => {
+    console.log(data);
+  };
   return (
     <_FlexInput>
-      <_Input type="text" placeholder="이메일" />
-      <_Input type="password" placeholder="비밀번호" />
-      <_Button>로그인</_Button>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <_Input
+          type="text"
+          placeholder="이메일"
+          {...register("email", {
+            required: "이메일을 입력하세요",
+            validate: {
+              useMail: (v) =>
+                v.match("^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$") ||
+                "이메일 형식을 지켜주세요",
+            },
+          })}
+        />
+        {errors.email && (
+          <_ErrorMsg>{errors.email?.message?.toString()}</_ErrorMsg>
+        )}
+        <_Input
+          type="password"
+          placeholder="비밀번호"
+          {...register("password", {
+            required: "비밀번호를 입력하세요",
+            validate: {
+              usePassword: (v) => v === pw || "비밀번호가 올바르지 않습니다",
+            },
+          })}
+        />
+        {errors.email && (
+          <_ErrorMsg>{errors.password?.message?.toString()}</_ErrorMsg>
+        )}
+        <_Button type="submit">로그인</_Button>
+      </form>
     </_FlexInput>
   );
 }

@@ -4,9 +4,10 @@ import google from "./img/google.png";
 import github from "./img/github.png";
 import kakao from "./img/kakao-talk.png";
 import "./fonts/Font.css";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Login from "./login";
 import Signup from "./signup";
+import ModalContext from "./store/modal-context";
 
 const _Modal = styled.div`
   width: 480px;
@@ -17,6 +18,7 @@ const _Modal = styled.div`
   box-shadow: 2px 2px 2px gray;
   font-weight: bold;
   justify-content: space-around;
+  background-color: white;
 `;
 
 const _ModalImg = styled.img`
@@ -75,6 +77,9 @@ const _CloseButton = styled.button`
   background: none;
   font-size: unset;
   margin: 0px 10px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const _EndContainer = styled.div`
@@ -97,12 +102,18 @@ const _Span = styled.span`
 export default function Modal() {
   const [isLogin, setIsLogin] = useState(false);
 
+  const modalOpenValue = useContext(ModalContext);
+
   const signup = () => {
     setIsLogin(true);
   };
 
   const login = () => {
     setIsLogin(false);
+  };
+
+  const modalValue = () => {
+    modalOpenValue.setModalOpen(false);
   };
 
   return (
@@ -117,7 +128,7 @@ export default function Modal() {
         <_Line />
         <_ContentBox>
           <_ButtonPosition>
-            <_CloseButton>x</_CloseButton>
+            <_CloseButton onClick={() => modalValue()}>x</_CloseButton>
           </_ButtonPosition>
           <_Flex>
             {isLogin ? (
