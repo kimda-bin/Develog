@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import "./fonts/Font.css";
 import { useForm } from "react-hook-form";
+import { useContext, useState } from "react";
+import UserContext from "./store/user-context";
+import ModalContext from "./store/modal-context";
 
 const _Input = styled.input`
   width: 100%;
@@ -61,8 +64,16 @@ export default function Login() {
   const id = "test@test.com";
   const pw = "test1234";
 
+  const isLoginValue = useContext(UserContext);
+  const modalOpenValue = useContext(ModalContext);
+
   const onSubmit = (data: any) => {
     console.log(data);
+  };
+
+  const UserLogin = () => {
+    modalOpenValue.setModalOpen(false);
+    isLoginValue.setIsLogin(true);
   };
   return (
     <_FlexInput>
@@ -73,9 +84,10 @@ export default function Login() {
           {...register("email", {
             required: "이메일을 입력하세요",
             validate: {
-              useMail: (v) =>
-                v.match("^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$") ||
-                "이메일 형식을 지켜주세요",
+              correctEmail: (v) => {
+                console.log(v.match(id));
+                return v.match(id) || "이메일이 올바르지 않습니다";
+              },
             },
           })}
         />
@@ -88,14 +100,19 @@ export default function Login() {
           {...register("password", {
             required: "비밀번호를 입력하세요",
             validate: {
-              usePassword: (v) => v === pw || "비밀번호가 올바르지 않습니다",
+              correctPassword: (v) => {
+                console.log(v.match(pw));
+                return v.match(pw) || "비밀번호가 올바르지 않습니다";
+              },
             },
           })}
         />
         {errors.email && (
           <_ErrorMsg>{errors.password?.message?.toString()}</_ErrorMsg>
         )}
-        <_Button type="submit">로그인</_Button>
+        <_Button type="submit" onClick={() => UserLogin()}>
+          로그인
+        </_Button>
       </form>
     </_FlexInput>
   );

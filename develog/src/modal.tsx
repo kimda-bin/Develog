@@ -8,6 +8,7 @@ import { useState, useContext } from "react";
 import Login from "./login";
 import Signup from "./signup";
 import ModalContext from "./store/modal-context";
+import UserContext from "./store/user-context";
 
 const _Modal = styled.div`
   width: 480px;
@@ -19,6 +20,17 @@ const _Modal = styled.div`
   font-weight: bold;
   justify-content: space-around;
   background-color: white;
+
+  @keyframes dropdown {
+    0% {
+      transform: translateY(-20%);
+    }
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  animation: dropdown 0.4s ease;
 `;
 
 const _ModalImg = styled.img`
@@ -65,6 +77,9 @@ const _FlexSymbol = styled(_Flex)`
 
 const _Symbol = styled.img`
   width: 32px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const _ButtonPosition = styled.div`
@@ -103,6 +118,7 @@ export default function Modal() {
   const [isLogin, setIsLogin] = useState(false);
 
   const modalOpenValue = useContext(ModalContext);
+  const isLoginValue = useContext(UserContext);
 
   const signup = () => {
     setIsLogin(true);
@@ -114,6 +130,11 @@ export default function Modal() {
 
   const modalValue = () => {
     modalOpenValue.setModalOpen(false);
+  };
+
+  const UserLogin = () => {
+    modalOpenValue.setModalOpen(false);
+    isLoginValue.setIsLogin(true);
   };
 
   return (
@@ -145,9 +166,9 @@ export default function Modal() {
             <div style={{ marginTop: "15px" }}>
               <div>소셜로그인</div>
               <_FlexSymbol>
-                <_Symbol src={google} />
-                <_Symbol src={github} />
-                <_Symbol src={kakao} />
+                <_Symbol src={google} onClick={() => UserLogin()} />
+                <_Symbol src={github} onClick={() => UserLogin()} />
+                <_Symbol src={kakao} onClick={() => UserLogin()} />
               </_FlexSymbol>
             </div>
           </_Flex>
