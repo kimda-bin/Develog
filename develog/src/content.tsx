@@ -9,6 +9,7 @@ const _ContentBox = styled.div`
   border-radius: 5px;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
   margin: 10px;
+  border: 1px solid #e4e4e4;
   &:hover {
     cursor: pointer;
     @keyframes contentHover {
