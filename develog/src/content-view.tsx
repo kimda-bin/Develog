@@ -75,6 +75,8 @@ const _UserBox = styled.div`
 
 const _Profile = styled.img`
   width: 115px;
+  height: 115px;
+  border-radius: 50%;
 `;
 
 const _ProfileNick = styled.div`
@@ -223,9 +225,9 @@ export default function ContentView() {
         </_ContentBox2>
         <_UserBox>
           <_Flex3>
-            <_Profile src={profile} />
+            <_Profile src={profile2} />
             <_ProfileNick onClick={() => navigate("/mypage")}>
-              dabeen
+              귀오미
             </_ProfileNick>
           </_Flex3>
           <div></div>
@@ -247,10 +249,6 @@ export default function ContentView() {
               <_CommentUserTime>방금전</_CommentUserTime>
             </div>
           </_CommentUser2>
-          <div>
-            <_UserButton>수정</_UserButton>
-            <_UserButton>삭제</_UserButton>
-          </div>
         </_CommentUser>
         <_UserComment>댓글댓글</_UserComment>
         {isAdd ? (
@@ -281,6 +279,10 @@ export default function ContentView() {
               <_CommentUserTime>방금전</_CommentUserTime>
             </div>
           </_CommentUser2>
+          <div>
+            <_UserButton>수정</_UserButton>
+            <_UserButton>삭제</_UserButton>
+          </div>
         </_CommentUser>
         <_UserComment>댓글댓글</_UserComment>
         {isAdd2 ? (

@@ -4,8 +4,10 @@ import styled from "styled-components";
 import "./fonts/Font.css";
 import profile from "./img/profile.png";
 import profile2 from "./img/profile.jpg";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import ModalContext from "./store/modal-context";
+import Alert from "./alert";
 
 const _Flex = styled.div`
   display: flex;
@@ -77,6 +79,10 @@ const _Profile = styled.img`
   width: 115px;
   height: 115px;
   border-radius: 50%;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const _ProfileNick = styled.div`
@@ -190,9 +196,21 @@ const _CommentButton2 = styled(_CommentButton)`
   color: #3a5fff;
 `;
 
+const _BackDrop = styled.div`
+  z-index: 10;
+  position: fixed;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  width: 100%;
+  height: 100%;
+  display: flex;
+`;
+
 export default function ContentAthorView() {
   const [isAdd, setIsAdd] = useState(false);
   const [isAdd2, setIsAdd2] = useState(false);
+  const AlertOpen = useContext(ModalContext);
   const navigate = useNavigate();
 
   const addComment = () => {
@@ -203,142 +221,163 @@ export default function ContentAthorView() {
     console.log("first");
     setIsAdd2(!isAdd2);
   };
+
+  const subscribeClick = () => {
+    console.log("click");
+    AlertOpen.setAlertOpen(true);
+  };
+
   return (
-    <_Flex>
-      <Header />
-      <_ContentBox>
-        <_Title>타이틀</_Title>
-        <_User>
-          <_Flex2>
-            <div style={{ fontWeight: "bold" }}>react와 typescript </div>
-            <span style={{ marginLeft: "4px" }}> · 2일전 · 🔒</span>
-          </_Flex2>
-          <div></div>
-        </_User>
-        <_ContentBox2>
-          <_ContentText>
-            react와 typescript를 알아보자. typescript는 JavaScript의 기본 문법에
-            자료형을 체크하는 기능을 추가한 것이다.
-          </_ContentText>
-        </_ContentBox2>
-        <_UserBox>
-          <_Flex3>
-            <_Profile src={profile2} />
-            <_ProfileNick onClick={() => navigate("/mypage")}>
-              귀오미
-            </_ProfileNick>
-          </_Flex3>
-          <div>
-            <_UserButton>구독</_UserButton>
-          </div>
-        </_UserBox>
+    <>
+      {AlertOpen.alertOpen ? (
+        <>
+          <_BackDrop>
+            <Alert text={"구독하였습니다"} link={"/contentView2"} />
+          </_BackDrop>
+        </>
+      ) : (
+        <></>
+      )}
+      <_Flex>
+        <Header />
+        <_ContentBox>
+          <_Title>타이틀</_Title>
+          <_User>
+            <_Flex2>
+              <div style={{ fontWeight: "bold" }}>react와 typescript </div>
+              <span style={{ marginLeft: "4px" }}> · 2일전 · 🔒</span>
+            </_Flex2>
+            <div></div>
+          </_User>
+          <_ContentBox2>
+            <_ContentText>
+              react와 typescript를 알아보자. typescript는 JavaScript의 기본
+              문법에 자료형을 체크하는 기능을 추가한 것이다.
+            </_ContentText>
+          </_ContentBox2>
+          <_UserBox>
+            <_Flex3>
+              <_Profile src={profile} />
+              <_ProfileNick onClick={() => navigate("/mypage")}>
+                dabeen
+              </_ProfileNick>
+            </_Flex3>
+            <div>
+              <_UserButton onClick={() => subscribeClick()}>구독</_UserButton>
+            </div>
+          </_UserBox>
 
-        <div>
-          <_Comment>2개의 댓글</_Comment>
-          <_CommentInput type="text" placeholder="댓글을 작성하세요" />
-          <_CommentButtonFlex>
-            <_CommentButton>댓글 작성</_CommentButton>
-          </_CommentButtonFlex>
-        </div>
-
-        <_CommentUser>
-          <_CommentUser2>
-            <_CommentUserProfile src={profile} />
-            <div>
-              <_CommentUserNick>test</_CommentUserNick>
-              <_CommentUserTime>방금전</_CommentUserTime>
-            </div>
-          </_CommentUser2>
           <div>
-            <_UserButton>수정</_UserButton>
-            <_UserButton>삭제</_UserButton>
+            <_Comment>2개의 댓글</_Comment>
+            <_CommentInput type="text" placeholder="댓글을 작성하세요" />
+            <_CommentButtonFlex>
+              <_CommentButton>댓글 작성</_CommentButton>
+            </_CommentButtonFlex>
           </div>
-        </_CommentUser>
-        <_UserComment>댓글댓글</_UserComment>
-        {isAdd ? (
-          <>
-            <_AnswerButton onClick={() => addComment()}>- 숨기기</_AnswerButton>
-            <_Flex>
-              <_UserComment2 style={{ width: "90%" }}>
-                <_CommentInput type="text" placeholder="댓글을 작성하세요" />
-                <_CommentButtonFlex>
-                  <_CommentButton2>취소</_CommentButton2>
-                  <_CommentButton>댓글 작성</_CommentButton>
-                </_CommentButtonFlex>
-              </_UserComment2>
-            </_Flex>
-          </>
-        ) : (
-          <>
-            <_AnswerButton onClick={() => addComment()}>
-              + 답글 달기
-            </_AnswerButton>
-          </>
-        )}
-        <_CommentUser>
-          <_CommentUser2>
-            <_CommentUserProfile src={profile2} />
+
+          <_CommentUser>
+            <_CommentUser2>
+              <_CommentUserProfile src={profile} />
+              <div>
+                <_CommentUserNick>test</_CommentUserNick>
+                <_CommentUserTime>방금전</_CommentUserTime>
+              </div>
+            </_CommentUser2>
+          </_CommentUser>
+          <_UserComment>댓글댓글</_UserComment>
+          {isAdd ? (
+            <>
+              <_AnswerButton onClick={() => addComment()}>
+                - 숨기기
+              </_AnswerButton>
+              <_Flex>
+                <_UserComment2 style={{ width: "90%" }}>
+                  <_CommentInput type="text" placeholder="댓글을 작성하세요" />
+                  <_CommentButtonFlex>
+                    <_CommentButton2>취소</_CommentButton2>
+                    <_CommentButton>댓글 작성</_CommentButton>
+                  </_CommentButtonFlex>
+                </_UserComment2>
+              </_Flex>
+            </>
+          ) : (
+            <>
+              <_AnswerButton onClick={() => addComment()}>
+                + 답글 달기
+              </_AnswerButton>
+            </>
+          )}
+          <_CommentUser>
+            <_CommentUser2>
+              <_CommentUserProfile src={profile2} />
+              <div>
+                <_CommentUserNick>귀오미</_CommentUserNick>
+                <_CommentUserTime>방금전</_CommentUserTime>
+              </div>
+            </_CommentUser2>
             <div>
-              <_CommentUserNick>귀오미</_CommentUserNick>
-              <_CommentUserTime>방금전</_CommentUserTime>
+              <_UserButton>수정</_UserButton>
+              <_UserButton>삭제</_UserButton>
             </div>
-          </_CommentUser2>
-        </_CommentUser>
-        <_UserComment>댓글댓글</_UserComment>
-        {isAdd2 ? (
-          <>
-            <_AnswerButton onClick={() => addComment2()}>
-              - 숨기기
-            </_AnswerButton>
-            <_Flex>
-              <_UserComment2 style={{ width: "90%" }}>
-                <_CommentInput type="text" placeholder="댓글을 작성하세요" />
-                <_CommentButtonFlex>
-                  <_CommentButton2>취소</_CommentButton2>
-                  <_CommentButton>댓글 작성</_CommentButton>
-                </_CommentButtonFlex>
-              </_UserComment2>
-            </_Flex>
-          </>
-        ) : (
-          <>
-            <_AnswerButton onClick={() => addComment2()}>
-              + 답글 달기
-            </_AnswerButton>
-          </>
-        )}
-        <_CommentUser>
-          <_CommentUser2>
-            <_CommentUserProfile src={profile} />
-            <div>
-              <_CommentUserNick>박카스</_CommentUserNick>
-              <_CommentUserTime>방금전</_CommentUserTime>
-            </div>
-          </_CommentUser2>
-          <div></div>
-        </_CommentUser>
-        <_UserComment>댓글댓글2</_UserComment>
-        {isAdd ? (
-          <>
-            <_AnswerButton onClick={() => addComment()}>- 숨기기</_AnswerButton>
-            <_Flex>
-              <_UserComment2 style={{ width: "90%" }}>
-                <_CommentInput type="text" placeholder="댓글을 작성하세요" />
-                <_CommentButtonFlex>
-                  <_CommentButton2>취소</_CommentButton2>
-                  <_CommentButton>댓글 작성</_CommentButton>
-                </_CommentButtonFlex>
-              </_UserComment2>
-            </_Flex>
-          </>
-        ) : (
-          <>
-            <_AnswerButton onClick={() => addComment()}>
-              + 답글 달기
-            </_AnswerButton>
-          </>
-        )}
-      </_ContentBox>
-    </_Flex>
+          </_CommentUser>
+          <_UserComment>댓글댓글</_UserComment>
+          {isAdd2 ? (
+            <>
+              <_AnswerButton onClick={() => addComment2()}>
+                - 숨기기
+              </_AnswerButton>
+              <_Flex>
+                <_UserComment2 style={{ width: "90%" }}>
+                  <_CommentInput type="text" placeholder="댓글을 작성하세요" />
+                  <_CommentButtonFlex>
+                    <_CommentButton2>취소</_CommentButton2>
+                    <_CommentButton>댓글 작성</_CommentButton>
+                  </_CommentButtonFlex>
+                </_UserComment2>
+              </_Flex>
+            </>
+          ) : (
+            <>
+              <_AnswerButton onClick={() => addComment2()}>
+                + 답글 달기
+              </_AnswerButton>
+            </>
+          )}
+          <_CommentUser>
+            <_CommentUser2>
+              <_CommentUserProfile src={profile} />
+              <div>
+                <_CommentUserNick>박카스</_CommentUserNick>
+                <_CommentUserTime>방금전</_CommentUserTime>
+              </div>
+            </_CommentUser2>
+            <div></div>
+          </_CommentUser>
+          <_UserComment>댓글댓글2</_UserComment>
+          {isAdd ? (
+            <>
+              <_AnswerButton onClick={() => addComment()}>
+                - 숨기기
+              </_AnswerButton>
+              <_Flex>
+                <_UserComment2 style={{ width: "90%" }}>
+                  <_CommentInput type="text" placeholder="댓글을 작성하세요" />
+                  <_CommentButtonFlex>
+                    <_CommentButton2>취소</_CommentButton2>
+                    <_CommentButton>댓글 작성</_CommentButton>
+                  </_CommentButtonFlex>
+                </_UserComment2>
+              </_Flex>
+            </>
+          ) : (
+            <>
+              <_AnswerButton onClick={() => addComment()}>
+                + 답글 달기
+              </_AnswerButton>
+            </>
+          )}
+        </_ContentBox>
+      </_Flex>
+    </>
   );
 }
