@@ -9,7 +9,31 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  LineChart,
+  Line,
 } from "recharts";
+import Select from "./select";
+import styled from "styled-components";
+
+const _ChartBox = styled.div`
+  font-size: 10px;
+  display: flex;
+  margin-top: 20px;
+  font-weight: bold;
+`;
+
+const _Title = styled.div`
+  font-family: "HakgyoansimWoojuR";
+  font-weight: bold;
+  font-size: 18px;
+  padding-left: 50px;
+`;
+
+const _Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
 export default function StatisticsView() {
   const MonthData = [
@@ -62,26 +86,31 @@ export default function StatisticsView() {
       view: 105,
     },
   ];
+
   return (
-    <div style={{ fontSize: "10px" }}>
-      <BarChart
-        width={300}
-        height={200}
-        data={MonthData}
-        margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 5,
-        }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Bar dataKey="view" fill="#3A5FFF" />
-      </BarChart>
-    </div>
+    <_Container>
+      <_Title>조회수</_Title>
+      <_ChartBox>
+        <div>
+          <BarChart
+            width={300}
+            height={200}
+            data={MonthData}
+            margin={{
+              top: 5,
+              right: 30,
+              left: 20,
+              bottom: 5,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip />
+            <Bar dataKey="view" fill="#1c4274" />
+          </BarChart>
+        </div>
+      </_ChartBox>
+    </_Container>
   );
 }

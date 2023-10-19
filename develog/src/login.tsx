@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import "./fonts/Font.css";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useContext, useState } from "react";
 import UserContext from "./store/user-context";
 import ModalContext from "./store/modal-context";
@@ -53,12 +53,16 @@ const _ErrorMsg = styled.div`
   margin-top: 2px;
 `;
 
+interface FormValues {
+  email: string;
+  password: string;
+}
 export default function Login() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<FormValues>();
 
   //계정(임시)
   const id = "test@test.com";
@@ -67,52 +71,43 @@ export default function Login() {
   const isLoginValue = useContext(UserContext);
   const modalOpenValue = useContext(ModalContext);
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  // const handleSubmit: React.FormEventHandler<HTMLFormElement> = (
+  //   e: React.FormEvent<HTMLFormElement>
+  // ) => {
+  //   e.preventDefault();
+  // };
+
+  const onSubmitHandle: SubmitHandler<FormValues> = (data) => {
+    console.log("valid", data);
+    isLoginValue.setIsLogin(true);
+    modalOpenValue.setModalOpen(false);
   };
 
   const UserLogin = () => {
-    modalOpenValue.setModalOpen(false);
-    isLoginValue.setIsLogin(true);
+    console.log("first");
   };
   return (
     <_FlexInput>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmitHandle)}>
         <_Input
           type="text"
           placeholder="이메일"
           {...register("email", {
             required: "이메일을 입력하세요",
-            validate: {
-              correctEmail: (v) => {
-                console.log(v.match(id));
-                return v.match(id) || "이메일이 올바르지 않습니다";
-              },
-            },
+            validate: (value) => value === id || "이메일이 일치하지 않습니다",
           })}
         />
-        {errors.email && (
-          <_ErrorMsg>{errors.email?.message?.toString()}</_ErrorMsg>
-        )}
+        {errors.email && <_ErrorMsg>{errors.email?.message}</_ErrorMsg>}
         <_Input
           type="password"
           placeholder="비밀번호"
           {...register("password", {
             required: "비밀번호를 입력하세요",
-            validate: {
-              correctPassword: (v) => {
-                console.log(v.match(pw));
-                return v.match(pw) || "비밀번호가 올바르지 않습니다";
-              },
-            },
+            validate: (value) => value === pw || "비밀번호가 일치하지 않습니다",
           })}
         />
-        {errors.email && (
-          <_ErrorMsg>{errors.password?.message?.toString()}</_ErrorMsg>
-        )}
-        <_Button type="submit" onClick={() => UserLogin()}>
-          로그인
-        </_Button>
+        {errors.password && <_ErrorMsg>{errors.password?.message}</_ErrorMsg>}
+        <_Button type="submit">로그인</_Button>
       </form>
     </_FlexInput>
   );

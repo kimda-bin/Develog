@@ -8,6 +8,7 @@ import logo from "./img/logo.png";
 import profile from "./img/profile.jpg";
 import UserContext from "./store/user-context";
 import Dropdown from "./dropdown";
+import { useNavigate } from "react-router-dom";
 
 const _Flex = styled.div`
   display: flex;
@@ -16,26 +17,26 @@ const _Flex = styled.div`
 
 const _Header = styled(_Flex)`
   width: 100%;
-  background-color: #ccc;
   justify-content: center;
   font-family: "HakgyoansimWoojuR";
+  position: absolute;
 `;
 
 const _HeaderInnerBox = styled(_Flex)`
-  width: 80%;
+  width: 70%;
   height: 50px;
   justify-content: space-between;
 `;
 
 const _ContentBox = styled(_Flex)`
   justify-content: space-between;
-  width: 150px;
+  width: 110px;
 `;
 
 const _WriteButton = styled.button`
   border: none;
   background-color: #3a5fff;
-  width: 65px;
+  width: 35px;
   height: 35px;
   color: white;
   border-radius: 5px;
@@ -52,6 +53,7 @@ const _UserButton = styled(_WriteButton)`
   color: black;
   font-size: 16px;
   font-weight: bold;
+  width: 51px;
 `;
 
 const _BackDrop = styled(_Flex)`
@@ -92,6 +94,7 @@ const _DropDown = styled.button`
 `;
 
 export default function Header() {
+  const navigate = useNavigate();
   const modalOpenValue = useContext(ModalContext);
   const isLoginValue = useContext(UserContext);
 
@@ -111,9 +114,9 @@ export default function Header() {
       <>
         <_Header>
           <_HeaderInnerBox>
-            <_Logo src={logo} />
+            <_Logo src={logo} onClick={() => navigate("/")} />
             <_ContentBox>
-              <_WriteButton>글쓰기+</_WriteButton>
+              <_WriteButton onClick={() => navigate("/write")}>+</_WriteButton>
               {isLoginValue.isLogin ? (
                 <_Flex>
                   <_Profile src={profile} />

@@ -10,7 +10,11 @@ const GrobalStyle = createGlobalStyle`
     height: 100%;
     width: 100%;
 
-    margin: 0px;
+    margin: auto 0px;
+
+    &::-webkit-scrollbar {
+    display: none;
+  }
   
   }
 `;

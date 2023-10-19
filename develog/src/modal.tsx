@@ -23,7 +23,7 @@ const _Modal = styled.div`
 
   @keyframes dropdown {
     0% {
-      transform: translateY(-20%);
+      transform: translateY(20%);
     }
     100% {
       transform: translateY(0);
@@ -119,6 +119,7 @@ export default function Modal() {
 
   const modalOpenValue = useContext(ModalContext);
   const isLoginValue = useContext(UserContext);
+  const AlertOpen = useContext(ModalContext);
 
   const signup = () => {
     setIsLogin(true);

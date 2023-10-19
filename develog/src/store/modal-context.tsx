@@ -7,9 +7,20 @@ const ModalContext = createContext<any>({
 
 export function ModalProvider({ children }: { children: React.ReactNode }) {
   const [modalOpen, setModalOpen] = useState(false);
+  const [postOpen, setPostOpen] = useState(false);
+  const [alertOpen, setAlertOpen] = useState(false);
 
   return (
-    <ModalContext.Provider value={{ modalOpen, setModalOpen }}>
+    <ModalContext.Provider
+      value={{
+        modalOpen,
+        setModalOpen,
+        postOpen,
+        setPostOpen,
+        alertOpen,
+        setAlertOpen,
+      }}
+    >
       {children}
     </ModalContext.Provider>
   );

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import "./fonts/Font.css";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { useState } from "react";
 import Password from "./password";
 
@@ -55,12 +55,17 @@ const _ErrorMsg = styled.div`
   margin-top: 2px;
 `;
 
+interface FormValues {
+  email: string;
+  code: string;
+}
+
 export default function Signup() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<FormValues>();
 
   const [mailClick, setMailClick] = useState(false);
   const [codeValue, setCodeValue] = useState("");
@@ -69,42 +74,37 @@ export default function Signup() {
   //인증코드(임시)
   const code = 1234;
 
-  const onSubmit = (data: any) => {
+  const onSubmitHandle: SubmitHandler<FormValues> = (data) => {
     console.log(data);
+    setCodeCheck(true);
   };
 
   const mailSend = () => {
     setMailClick(true);
   };
 
-  const correctMail = () => {
-    if (Number(codeValue) === code) {
-      setCodeCheck(true);
-    }
-  };
+  const emailRegex = /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/;
 
   return (
     <_FlexInput>
       {codeCheck ? (
         <Password />
       ) : (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmitHandle)}>
           <_FlexInput>
             <_Input
               type="text"
               placeholder="이메일"
               {...register("email", {
                 required: "이메일을 입력하세요",
-                validate: {
-                  useMail: (v) =>
-                    v.match(
-                      /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$/
-                    ) || "이메일 형식이 올바르지 않습니다",
+                pattern: {
+                  value: emailRegex,
+                  message: "이메일 양식을 확인해주세요",
                 },
               })}
             />
-            {errors.email && (
-              <_ErrorMsg>{errors.email?.message?.toString()}</_ErrorMsg>
+            {errors.email?.type === "pattern" && (
+              <_ErrorMsg>{errors.email?.message}</_ErrorMsg>
             )}
             {mailClick ? (
               <_FlexInput2>
@@ -113,17 +113,12 @@ export default function Signup() {
                   placeholder="인증코드"
                   {...register("code", {
                     required: "인증코드를 입력하세요",
-                    validate: {
-                      useMail: (v) =>
-                        v.match(code) || "인증코드가 일치하지 않습니다",
-                    },
+                    validate: (value) =>
+                      Number(value) === code || "인증코드가 일치하지 않습니다",
                   })}
-                  onChange={(e) => setCodeValue(e.target.value)}
                 />
-                {errors.code && (
-                  <_ErrorMsg>{errors.code?.message?.toString()}</_ErrorMsg>
-                )}
-                <_Button onClick={() => correctMail()}>이메일 인증</_Button>
+                {errors.code && <_ErrorMsg>{errors.code?.message}</_ErrorMsg>}
+                <_Button type="submit">이메일 인증</_Button>
               </_FlexInput2>
             ) : (
               <_Button onClick={() => mailSend()}>인증코드 전송</_Button>

@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import "./fonts/Font.css";
-import { useForm } from "react-hook-form";
-import React, { useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import React, { useContext, useState } from "react";
+import ModalContext from "./store/modal-context";
+import Alert from "./alert";
 
 const _Flex = styled.div`
   display: flex;
@@ -9,6 +11,17 @@ const _Flex = styled.div`
   align-items: center;
   width: 300px;
   height: auto;
+`;
+
+const _BackDrop = styled.div`
+  z-index: 10;
+  position: fixed;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  width: 100%;
+  height: 100%;
+  display: flex;
 `;
 
 const _FlexInput = styled(_Flex)`
@@ -48,17 +61,23 @@ const _Button = styled.button`
   }
 `;
 
+interface FormValues {
+  password: string;
+  passwordC: string;
+}
 export default function Password() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<FormValues>();
 
+  const modalOpenValue = useContext(ModalContext);
   const [passwordC, setPasswordC] = useState("");
 
-  const onSubmit = (data: any) => {
+  const onSubmit: SubmitHandler<FormValues> = (data) => {
     console.log(data);
+    modalOpenValue.setModalOpen(false);
   };
 
   return (
@@ -81,9 +100,7 @@ export default function Password() {
               setPasswordC(e.target.value)
             }
           />
-          {errors.password && (
-            <_ErrorMsg>{errors.password?.message?.toString()}</_ErrorMsg>
-          )}
+          {errors.password && <_ErrorMsg>{errors.password?.message}</_ErrorMsg>}
           <_Input
             type="password"
             placeholder="비밀번호 확인"
@@ -96,7 +113,7 @@ export default function Password() {
             })}
           />
           {errors.passwordC && (
-            <_ErrorMsg>{errors.passwordC?.message?.toString()}</_ErrorMsg>
+            <_ErrorMsg>{errors.passwordC?.message}</_ErrorMsg>
           )}
           <_Button type="submit">회원가입</_Button>
         </_FlexInput>

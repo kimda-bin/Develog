@@ -2,59 +2,44 @@ import styled from "styled-components";
 import "./fonts/Font.css";
 import statisticsImg from "./img/statistics.png";
 import StatisticsView from "./statistics-view";
+import StatisticsComment from "./statistics-comment";
+import StatisticsLike from "./statistics-like";
+import StatisticsSubscribe from "./statistics-subscribe";
+import { useState } from "react";
+import Select from "./select";
+import StatisticsWeekend from "./statistics-weekend";
+import StatisticsTotal from "./statistics-total";
 
 const _Flex = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: "HakgyoansimWoojuR";
 `;
 
-const _ProfileBox = styled(_Flex)`
-  width: 40%;
-  height: 300px;
-  border: 1px solid #ccc;
-  flex-direction: column;
-`;
-
-const _ButtonBox = styled(_Flex)`
-  width: 200px;
-  justify-content: space-around;
-  height: 15px;
-`;
-
-const _StatisticsBox = styled(_ProfileBox)`
-  width: 80%;
-  justify-content: space-evenly;
-`;
-
-const _StatisticsButton = styled.button`
-  border: none;
-  background: none;
-  font-size: 15px;
-  font-family: "HakgyoansimWoojuR";
-
-  &:hover {
-    cursor: pointer;
-    border-bottom: 1.5px solid #3a5fff;
-  }
-`;
-
-const _StatisticImg = styled.img`
-  height: 170px;
+const _Box = styled.div`
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+  margin-bottom: 20px;
 `;
 
 export default function Statistic() {
   return (
-    <_StatisticsBox>
-      <_ButtonBox>
-        <_StatisticsButton>조회수</_StatisticsButton>
-        <_StatisticsButton>좋아요</_StatisticsButton>
-        <_StatisticsButton>구독</_StatisticsButton>
-      </_ButtonBox>
+    <div>
       <div>
-        <_StatisticImg src={statisticsImg} />
+        <StatisticsTotal />
       </div>
-    </_StatisticsBox>
+      <Select />
+      <div>
+        <_Flex>
+          <StatisticsComment />
+          <StatisticsLike />
+        </_Flex>
+        <_Flex>
+          <StatisticsSubscribe />
+          <StatisticsView />
+        </_Flex>
+        <_Box>
+          <StatisticsWeekend />
+        </_Box>
+      </div>
+    </div>
   );
 }
