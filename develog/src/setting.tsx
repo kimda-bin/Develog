@@ -310,7 +310,7 @@ export default function SettingPage() {
           </_MarginPadding>
 
           <_MarginPadding>
-            {titleUpdate ? (
+            {emailUpdate ? (
               <>
                 <_Content>
                   <div style={{ display: "flex" }}>
